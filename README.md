@@ -142,6 +142,23 @@ library(tidyverse)
 source("~/read_samtools_stats/read_bcftools_stats.R")
 
 SN <- read_bcftools_stats("~/variants.stats",  section = "SN")
+
+# Using with aws.s3
+library(aws.s3)
+Sys.setenv(AWS_DEFAULT_REGION = "us-east-2")
+
+# Get object
+obj <- get_object(
+  object = s3_filepath,
+  bucket = s3_bucket,
+  as = "text"
+)
+
+# Start a text connection
+s3_filepath <- textConnection(obj)
+
+# The text connection will only work for one file read, but can be run again
+DP <- read_bcftools_stats(s3_filepath, section = "DP")
 ```
 
 The function returns the parsed BCFtools statistics as a tidy data frame.

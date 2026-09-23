@@ -145,7 +145,7 @@ SN <- read_bcftools_stats("~/variants.stats",  section = "SN")
 
 # Using with aws.s3
 library(aws.s3)
-Sys.setenv(AWS_DEFAULT_REGION = "us-east-2")
+Sys.setenv(AWS_DEFAULT_REGION = s3_region)
 
 # Get object
 obj <- get_object(
@@ -155,10 +155,10 @@ obj <- get_object(
 )
 
 # Start a text connection
-s3_filepath <- textConnection(obj)
+s3_text_connection <- textConnection(obj)
 
 # The text connection will only work for one file read, but can be run again
-DP <- read_bcftools_stats(s3_filepath, section = "DP")
+DP <- read_bcftools_stats(s3_text_connection, section = "DP")
 ```
 
 The function returns the parsed BCFtools statistics as a tidy data frame.
